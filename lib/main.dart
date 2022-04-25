@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -11,72 +12,60 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const HomePage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _HomePageState extends State<HomePage> {
+  late final TextEditingController _emailController;
+  late final TextEditingController _passController;
 
-  void _incrementCounter() {
-    setState(() {
-    
-      _counter++;
-    });
-  }
+  @override
+  void initState() {
+    _emailController = TextEditingController();
+    _passController = TextEditingController();
 
-    void _decrementCounter() {
-    setState(() {
-    
-      _counter--;
-    });
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-   
     return Scaffold(
       appBar: AppBar(
-     
-        title: Text(widget.title),
+        title: const Text('Register'),
       ),
-      body: Center(
-      
-        child: Column(
-         
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-            FloatingActionButton(onPressed: _decrementCounter),
-          ],
-        ),
-      
+      body: Column(
+        children: [
+          TextField(controller: _emailController),
+          TextField(controller: _passController),
+          TextButton(
+            child: const Text('Register'),
+            onPressed: () async {
+              // print(FirebaseAuth.instance.currentUser);
+            },
+          ),
+        ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passController.dispose();
+
+    super.dispose();
   }
 }
